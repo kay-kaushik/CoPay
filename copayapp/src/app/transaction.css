@@ -1,0 +1,42 @@
+.transaction-container {
+    display: flex;
+    align-items: center;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin: 10px 0;
+    transition: transform 0.2s;
+}
+
+.transaction-container:hover {
+    transform: scale(1.02);
+}
+
+.amount {
+    background-color: #000; /* Black background */
+    color: #FFA500; /* Orange text */
+    font-size: 1.5em;
+    font-weight: bold;
+    padding: 8px;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.description {
+    background-color: #000; /* Black background */
+    color: #FFF; /* White text */
+    font-size: 1.2em;
+    padding: 8px;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.caculation {
+    background-color: #e0e0e0; /* Light grey background */
+    color: #333; /* Dark text */
+    font-size: 0.9em;
+    padding: 8px;
+    border-radius: 4px;
+    font-style: italic;
+}
