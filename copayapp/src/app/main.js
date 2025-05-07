@@ -3,84 +3,44 @@ import Transaction from "./transaction";
 import './main.css';
 
 import { useState } from "react";
-export default function Main(){
 
+export default function Main() {
+    const [groupMen, setGroupMen] = useState([
+        { name: "kartik", owes: 0, owed: 0 },
+        { name: "zerish", owes: 0, owed: 0 },
+        { name: "vandan", owes: 0, owed: 0 },
+      ]);
+
+    const [selectedPartners, setSelectedPartners] = useState([]);
     const [transactions, setTransaction] = useState([{
-        key:0,
+        key: 0,
         desc: "test desc",
         number: 100,
-        calculation: "50 /50"
+        calculation: "50/50"
     }]);
     const [input, setInput] = useState("");
     const [amount, setAmount] = useState(0);
-    const [members, setMembers] = useState([
-        {
-            name:"Kartik",
-            owed:0
-        },
-        {
-            name:"Zerish",
-            owed:0
-        }
-    ]);
+
+    const handlePartnerChange = (partner) => {
+        setSelectedPartners((prev) =>
+            prev.includes(partner)
+                ? prev.filter((p) => p !== partner)
+                : [...prev, partner]
+        );
+    };
 
     const handleCalculation = (split) => {
-        switch (split) {
-            case "ypse":
-                // Logic for when the user paid and wants to split equally
-                const equalSplit = parseFloat(amount) / members.length;
-                const updatedMembersEqual = members.map((member) => ({
-                    ...member,
-                    owed: member.name === 'kartik'? member.owed : member.owed + equalSplit
-                }));
-                setMembers(updatedMembersEqual);
-                break;
-            case "yofa":
-                // Logic for when the user is owed the full amount
-                const fullAmount = parseFloat(amount);
-                const updatedMembersFull = members.map((member) => ({
-                    ...member,
-                    owed: member.owed - fullAmount
-                }));
-                setMembers(updatedMembersFull);
-                break;
-            case "tpse":
-                // Logic for when Zerish paid and wants to split equally
-                const zerishEqualSplit = parseFloat(amount) / members.length;
-                const updatedMembersZerishEqual = members.map((member) => ({
-                    ...member,
-                    owed: member.owed + zerishEqualSplit
-                }));
-                setMembers(updatedMembersZerishEqual);
-                break;
-            case "tofa":
-                // Logic for when Zerish is owed the full amount
-                const zerishFullAmount = parseFloat(amount);
-                const updatedMembersZerishFull = members.map((member) => ({
-                    ...member,
-                    owed: member.owed - zerishFullAmount
-                }));
-                setMembers(updatedMembersZerishFull);
-                break;
-            default:
-                console.warn("Unknown split type");
-                break;
-        }
-        const amountToAdd = parseFloat(amount) / 2;
-        const updateMembers = members.map((member) => ({
-            ...member,
-            owed: member.owed + amountToAdd
-        }));
-        setMembers(updateMembers);
-    }
-
+        {/* write the algo for handle calc, we have split between now data, de struct it and use. Make use of a lgo by 
+            gpt to calculate it and display owes and owed.  */}
+    };
 
     const addTransaction = (split) => {
-        if (input.trim() != "" && amount.trim() != ""){
+        if (input.trim() !== "" && amount !== "") {
             const newTransaction = {
                 key: transactions.length,
                 desc: input,
                 number: parseFloat(amount),
+                splitbetween: selectedPartners,
                 calculation: "50/50"
             };
             handleCalculation(split);
@@ -88,34 +48,39 @@ export default function Main(){
             setInput("");
             setAmount("");
         }
-        
-    }
+    };
 
-    return(
+    return (
         <div className="home-container">
             <h1 className="heading">
-                CoPay
+                Running Balance
             </h1>
-            <p>description</p>
-            <textarea value={input} onChange={(e) => setInput(e.target.value)}></textarea>
-            <p>amount</p>
-            <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)}></input>
-            <button onClick={addTransaction("ypse")}>You paid, split equally</button>
-            <button onClick={addTransaction("yofa")}>You are owed the full amount</button>
-            <button onClick={addTransaction("tpse")}>Zerish paid, split equally</button>
-            <button onClick={addTransaction("tofa")}>Zerish is owed the full amount</button>
-            {members.map((member, index) => (
-                <p key={index}>
-                {member.name} owes {member.owed} 
-                </p>
+            <p>Description</p>
+            <textarea value={input} onChange={(e) => setInput(e.target.value)} />
+            <p>Amount</p>
+            <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} />
 
+            {groupMen.map((men, index) => (
+                <div key={index}>
+                    <input
+                        type="checkbox"
+                        value={men.name}
+                        checked={selectedPartners.includes(men.name)}
+                        onChange={() => handlePartnerChange(men.name)}
+                    />
+                    {men.name}
+                </div>
             ))}
 
+            <button onClick={() => addTransaction("ypse")}>You paid, split equally</button>
+
+            <h2>Transactions:</h2>
             {transactions.map((t) => (
                 <Transaction
                     key={t.key}
                     desc={t.desc}
                     amount={t.number}
+                    splitbetween={t.splitbetween}
                     calculation={t.calculation}
                 />
             ))}

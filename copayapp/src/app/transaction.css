@@ -40,3 +40,13 @@
     border-radius: 4px;
     font-style: italic;
 }
+
+.split-between{
+    background-color: #e0e0e0; /* Light grey background */
+    color: #333; /* Dark text */
+    font-size: 0.9em;
+    padding: 8px;
+    border-radius: 4px;
+    font-style: italic;
+
+}
