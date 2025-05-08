@@ -29,9 +29,27 @@ export default function Main() {
         );
     };
 
-    const handleCalculation = (split) => {
-        {/* write the algo for handle calc, we have split between now data, de struct it and use. Make use of a lgo by 
-            gpt to calculate it and display owes and owed.  */}
+    const handleCalculation = (transaction) => {
+        {/* for now there is no paid by feild yet, we assume paid by user whihc is me kay. */}
+        
+        const {number,splitbetween} = transaction;
+        const amount = number; 
+        const share = amount / splitbetween.length;
+
+        const updatedGroup = groupMen.map((member) => {
+            if(splitbetween.includes(member.name)){
+                if(member.name === "kartik"){
+                    return{...member, owed: member.owed + (amount - share)};
+                }
+                else{
+                    return{...member, owes: member.owes + share};
+                }
+            }
+            return member;
+        })
+
+        setGroupMen(updatedGroup);
+        
     };
 
     const addTransaction = (split) => {
@@ -43,10 +61,11 @@ export default function Main() {
                 splitbetween: selectedPartners,
                 calculation: "50/50"
             };
-            handleCalculation(split);
             setTransaction([...transactions, newTransaction]);
+            handleCalculation(newTransaction);
             setInput("");
             setAmount("");
+            setSelectedPartners([]);
         }
     };
 
@@ -73,6 +92,11 @@ export default function Main() {
             ))}
 
             <button onClick={() => addTransaction("ypse")}>You paid, split equally</button>
+
+            <h1>running balance</h1>
+            {groupMen.map((men)=> (
+                <h3 key = {men.name}> {men.name} owes ${men.owes} and is owed ${men.owed}</h3>
+            ))}
 
             <h2>Transactions:</h2>
             {transactions.map((t) => (
